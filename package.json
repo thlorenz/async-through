@@ -1,6 +1,6 @@
 {
   "name": "async-through",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Readable stream that ensures that onend is only called once no ondata items are pending, thus supporting async operations inside ondata.",
   "main": "index.js",
   "scripts": {
