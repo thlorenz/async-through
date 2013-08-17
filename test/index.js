@@ -98,3 +98,25 @@ test('\nusing stream instead of this, providing both ondata only', function (t) 
       t.end()
     }))
 })
+
+test('\none to many', function (t) {
+  
+  var stream = asyncThru(ondata);
+
+  function ondata(data) {
+    setTimeout(function () {
+      stream.queue(data * 2 + '\n', true);
+      stream.queue(data / 2 + '\n');
+    }, 20 * data);
+  }
+
+  var ended, data = '';
+  from([1, 3, 4, 5])
+    .pipe(stream)
+    .on('end', function () { ended = true })
+    .pipe(concatStream(function (data) {
+      t.equal(data, '2\n0.5\n6\n1.5\n8\n2\n10\n2.5\n', 'data')
+      t.ok(ended, 'ended')
+      t.end()
+    }))
+})

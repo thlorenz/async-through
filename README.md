@@ -58,6 +58,34 @@ from([1, 3, 4, 5])
   .pipe(process.stdout);
 ```
 
+#### one to many
+
+```js
+var stream = asyncThru(ondata);
+
+function ondata(data) {
+  setTimeout(function () {
+    stream.queue(data * 2 + '\n', true);
+    stream.queue(data / 2 + '\n');
+  }, 200 * data);
+}
+
+from([1, 3, 4, 5])
+  .pipe(stream)
+  .on('end', function () { console.log('stream ended'); })
+  .pipe(process.stdout);
+```
+
+```
+2
+0.5
+4
+1
+6
+1.5
+stream ended
+```
+
 ## Installation
 
     npm install async-through
@@ -80,12 +108,17 @@ from([1, 3, 4, 5])
  */
 ```
 
-## Limitations
+### one-to-many
 
-At this point a one to one relationship of incoming items to outgoing items is assumed. Therefore for each incoming item
-you can only `queue` one processed item.
+If you want to `queue` multiple results per incoming item, do so by providing `true` as the second paramater to `queue`
+in order to signal that more results for this item are coming.
 
-This limitation get fixed in future versions.
+```js
+stream.queue(fst, true);
+stream.queue(snd, true);
+stream.queue(trd, true);
+stream.queue(last);
+```
 
 ## License
 

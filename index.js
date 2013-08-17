@@ -25,11 +25,11 @@ var go = module.exports = function (ondata_, onend_) {
   onend_ = onend_ || function () { stream.queue(null) }
 
   var stream_queue = stream.queue;
-  stream.queue = function (data) {
+  stream.queue = function (data, moreComing) {
     if (data === null ) return onend();
 
     stream_queue.call(stream, data);
-    maybeEnd();
+    maybeEnd(false, moreComing);
   }
 
 
@@ -42,8 +42,8 @@ var go = module.exports = function (ondata_, onend_) {
     maybeEnd(true);
   }
 
-  function maybeEnd (ended_) {
-    if (ended_) ended = true; else --pending;
+  function maybeEnd (ended_, moreComing) {
+    if (ended_) ended = true; else if(!moreComing) --pending;
     if (!pending && ended && !onended) {
       onended = true;
       onend_.call(stream);
