@@ -30,6 +30,14 @@ from([1, 3, 4, 5])
   .pipe(process.stdout);
 ```
 
+```
+2
+6
+8
+10
+stream ended
+```
+
 #### `onend` is optional
 
 ```js
