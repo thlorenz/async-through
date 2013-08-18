@@ -70,7 +70,7 @@ function ondata(data) {
   }, 200 * data);
 }
 
-from([1, 3, 4, 5])
+from([1, 2, 3])
   .pipe(stream)
   .on('end', function () { console.log('stream ended'); })
   .pipe(process.stdout);
